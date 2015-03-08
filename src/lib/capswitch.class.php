@@ -21,10 +21,10 @@ class capswitch
     'USD' => 1.5897,
     'CHF' => 1.6135,
     'GBP' => 0.8031,
-    'JPY' => 164.5498,  // USD * JPY = JPY rate relative to EUR 
-    'CAD' => 1.6201     // GBP * CAD = CAD rate relative to EUR
+    'JPY' => 164.549847,  // USD * JPY = JPY rate relative to EUR 
+    'CAD' => 1.61800557   // GBP * CAD = CAD rate relative to EUR
     );
-  private $errors = array();
+  public $errors = array();
 
   public function __construct() {
     // class construct
@@ -42,51 +42,29 @@ class capswitch
   public function convert($from, $to, $amount) 
   {
     
-    /** Do some error checking
-     ***************************************************************************
-     */
-      
-      // // Check if the source currency exisits in _exchrate
-      // if ( !array_key_exists($from, $this->_exchrate) )
-      // {
-      //   $this->errors[] = "ERROR: unable to retrieve SOURCE exchange rate" . PHP_EOL;
-      // }
-
-      // // Check if the target currency exisits in _exchrate
-      // if ( !array_key_exists($to, $this->_exchrate) )
-      // {
-      //   $this->errors[] = "ERROR: unable to retrieve TARGET exchange rate". PHP_EOL;
-      // }
-
-      // // Check is amount is a number
-      // if ( !is_numeric($amount) ) 
-      // {
-      //   $this->errors[] = "ERROR: Ammount is not a number.". PHP_EOL;
-      // }
+    // are there errors?
+    if ( count($this->errors) ) {
+      return 0;
+    }
     
-      // // If there are errors, return messages
-      // if ( count($this->errors) ) 
-      // {
-      //   $messages = implode($this->errors);
-      //   $this->errors = array(); // reset the array
-      //   return $messages;
-      // }
-
     /** Checks passed, on to main conversion
      ***************************************************************************
      */
     
-      if ($to == "EUR")
-      {
+      if ($to == "EUR") {
+        
         // converting to EUR, find inverse of currency
         $value = $amount * ( 1 / $this->_exchrate[$from]) / $this->_exchrate[$to];
-      } else {
-        // normal conversion calaulation
-        $value= $amount * $this->_exchrate[$to] / $this->_exchrate[$from];
-      }
+        
+        } else {
+          
+          // normal conversion calaulation
+          $value= $amount * $this->_exchrate[$to] / $this->_exchrate[$from];
+        
+        }
 
-      // round up to 4 significant digits
-      $value = round($value, 4); 
+      // round up to 2 significant digits
+      $value = round($value, 2); 
       
       // english number format, truncate to two decimal places
       $value = number_format($value, 2, ".", ",");
@@ -103,4 +81,39 @@ class capswitch
     return array_keys($this->_exchrate);
   }
 
+  public function validateCode($iso, $orig) 
+  {
+    // Verify if the exchange rate is valid and exists.
+    if (!preg_match('/[A-Z][A-Z][A-Z]/', $iso) || !array_key_exists($iso, $this->_exchrate)) {
+      $this->errors[] = "Invalid Exchange Rate ISO code in $orig";
+      return "";
+    }
+
+    return $iso;
+    
+
+  }
+
+  public function validateNum($num)
+  {
+    
+    if (!is_numeric($num))
+    {
+      $this->errors[] = "Invalid Amount, must be a number like '1.234'";
+      return 0;
+    }
+    
+    return $num;
+
+  }
+
+  public function getErrors()
+  {
+    if ( count($this->errors) ) 
+    {
+      foreach ($this->errors as $mesage) {
+        echo $mesage . "<br/>";
+      }
+    }
+  }
 }

@@ -18,35 +18,26 @@ require_once(__LIB__ . '/capswitch.class.php');
 // instantiate the class
 $c = new capswitch;
 
-/*
-  echo $c->convert('EUR', 'USD', 100);
-  echo $c->convert('USD', 'EUR', 100);
-  echo $c->convert('EUR', 'CHF', 100);
-  echo $c->convert('EUR', 'GBP', 100);
-  echo $c->convert('USD', 'JPY', 100);
-  echo $c->convert('CHF', 'USD', 100);
-  echo $c->convert('GBP', 'CAD', 100);
-
-  echo "Example of an invalid SOURCE currency" . PHP_EOL;
-  echo $c->convert('GPL', 'USD', '100');
-
-  echo "Example of an invalid TARGET currency" . PHP_EOL;
-  echo $c->convert('EUR', 'GPL', '100');
-
-  echo $c->convert('GBP', 'CAD', "F00");
-*/
-
-// Using GET for simplicity
+// Using GET
 if ( count($_GET) ) {
-  $to = (string) htmlspecialchars($_GET['to']);
-  $from = (string) htmlspecialchars($_GET['from']);
-  $amount = (integer) htmlspecialchars($_GET['amount']);
+  
+  // Do some security checks
+  $from = filter_input(INPUT_GET, 'from', FILTER_SANITIZE_STRING);
+  $from = $c->validateCode($from, "Source Currency");
+
+  $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_STRING);
+  $to = $c->validateCode($to, "Target Currency");
+
+  $amount = filter_input(INPUT_GET, 'amount', FILTER_SANITIZE_NUMBER_FLOAT);
+  $amount = $c->validateNum($amount);
+
 } else {
+  
   $to = 'EUR';
   $from = 'EUR';
-  $amount = 0.00;
-}
+  $amount = 0;
 
+}
 
 // Output HTML
 include 'header.inc.php';
@@ -102,14 +93,17 @@ include 'header.inc.php';
           <div class="form-group">
             <label for="amount">Amount to convert</label>
             <div class="input-group">
-              <input name="amount" type="number" class="form-control" id="amount" value="<?php echo (bool) $amount ? $amount : '0.00'; ?>" >
+              <input name="amount" type="number" class="form-control" id="amount" value="<?php echo $amount; ?>" >
             </div>
           </div>
-
+          
           <button type="submit" class="btn btn-primary">convert</button>
+        
         </form>
         
         <hr class="half-margins invisible">
+
+        <?php if ($c->errors): ?><div class="alert alert-danger" role="alert"><?php $c->getErrors() ?></div><?php endif; ?>
 
         <div class="well">
           <h1><?php 
