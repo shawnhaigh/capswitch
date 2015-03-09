@@ -16,7 +16,7 @@
 * Basic usage:
 * require 'path/<thisFile>';'
 * $cs = new capswtich;
-* $cs->convert( str $sourceCurrency, str $targetCurrency, float amountToConvert);
+* $cs->convert( str $sourceCurrency, str $targetCurrency, int amountToConvert);
 *
 * Parameters
 * 
@@ -44,7 +44,7 @@ class capswitch
     Accepts three arguments:
     from: (string) an ISO 4217 currency code
     to: (string) an ISO 4217 currency code
-    amount: (float) amount to convert
+    amount: (int) amount to convert
     returns a string
   */
   public function convert($from, $to, $amount) 
