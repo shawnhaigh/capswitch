@@ -29,7 +29,7 @@ if ( count($_GET) ) {
   $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_STRING);
   $to = $c->validateCode($to, "Target Currency");
 
-  $amount = filter_input(INPUT_GET, 'amount', FILTER_SANITIZE_NUMBER_FLOAT);
+  $amount = filter_input(INPUT_GET, 'amount', FILTER_SANITIZE_NUMBER_INT);
   $amount = $c->validateNum($amount);
 
 } else {
@@ -95,7 +95,7 @@ include 'header.inc.php';
           <div class="form-group">
             <label for="amount">Amount to convert</label>
             <div class="input-group">
-              <input name="amount" type="number" step="any" class="form-control" id="amount" value="<?php echo $amount; ?>" >
+              <input name="amount" type="number" class="form-control" id="amount" value="<?php echo $amount; ?>" >
             </div>
           </div>
           

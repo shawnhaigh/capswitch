@@ -58,7 +58,7 @@ class capswitch
     /** Checks passed, on to main conversion
      ***************************************************************************
      */
-    
+      
       if ($to == "EUR") {
         
         // converting to EUR, find inverse of currency
@@ -102,7 +102,7 @@ class capswitch
     // Verify if the exchange rate is valid and exists.
     if (!preg_match('/[A-Z][A-Z][A-Z]/', $iso) || !array_key_exists($iso, $this->_exchrate)) 
     {
-      $this->errors[] = "Invalid Exchange Rate ISO code in $orig";
+      $this->errors[] = "Invalid, exchange rate ISO code in <b>$orig</b>";
       return "";
     }
 
@@ -120,7 +120,7 @@ class capswitch
     
     if (!is_numeric($num))
     {
-      $this->errors[] = "Invalid Amount, must be a number like '1.234'";
+      $this->errors[] = "Invalid, <b>amount</b> must be an integer";
       return 0;
     }
     
