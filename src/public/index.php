@@ -4,12 +4,13 @@
  * File:   index.php
  * Author: Shawn Haigh - Mar 7, 2015
  * 
- * Decsription: 
+ * Decsription: Displays form contols to input currencies and and amount to 
+ *              convert. Displays the result or any errors.
  *******************************************************************************
  */
 define('CAPSWITCH', TRUE);
 
-// define a constant to the lib folder
+// define a constant to the lib folder outsite of the public root
 define('__LIB__', dirname(dirname(__FILE__)).'/lib'); 
 
 // require the capswtich class
@@ -33,6 +34,7 @@ if ( count($_GET) ) {
 
 } else {
   
+  // Set some default values
   $to = 'EUR';
   $from = 'EUR';
   $amount = 0;
