@@ -95,7 +95,7 @@ include 'header.inc.php';
           <div class="form-group">
             <label for="amount">Amount to convert</label>
             <div class="input-group">
-              <input name="amount" type="number" class="form-control" id="amount" value="<?php echo $amount; ?>" >
+              <input name="amount" type="number" step="any" class="form-control" id="amount" value="<?php echo $amount; ?>" >
             </div>
           </div>
           
